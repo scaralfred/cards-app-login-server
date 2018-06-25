@@ -15,7 +15,7 @@ var {authenticate} = require('./middleware/authenticate')
 // SET UP EXPRESS AND PORT NUMBER 
 
 var app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 
 // MIDDLEWARES
 app.use(bodyParser.json());
