@@ -20,6 +20,20 @@ const port = process.env.PORT || 3000;
 // MIDDLEWARES
 app.use(bodyParser.json());
 
+// POST CLASS //
+
+app.post('/school', authenticate, (req,res) => {
+    var school = new School({
+         classSettings: req.body.classSettings,
+        _creator: req.user._id
+    })
+  school.save().then((doc) => {
+    res.send(doc);
+  }, (e) => {
+    res.status(400).send(e);
+  });
+});
+
 // POST /todos
 
 app.post('/todos', authenticate, (req, res) => {
