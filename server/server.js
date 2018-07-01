@@ -24,7 +24,7 @@ app.use(bodyParser.json());
 
 app.post('/school', authenticate, (req,res) => {
     var school = new School({
-         classSettings: req.body.classSettings,
+         classSettings: req.body,
         _creator: req.user._id
     })
   school.save().then((doc) => {
