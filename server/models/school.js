@@ -5,10 +5,19 @@ var School = mongoose.model('School', {
     type: Object,
     required: true
   },
-  _creator: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true
-  }
+//    _creator: {
+//      type: mongoose.Schema.Types.ObjectId,
+//      required: true
+//  }
 });
 
-module.exports = {Todo};
+//School.methods.generateSchool = function () {
+//    var newSchool = {
+//        starCounter: 0,
+//        classList: {},
+//        playerPhoto: {}
+//    }
+//    return newSchool
+//}
+
+module.exports = {School};

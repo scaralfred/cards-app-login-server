@@ -31,6 +31,10 @@ var UserSchema = new mongoose.Schema({
            required: true
        }
    }],
+   schoolID: {
+       type: String,
+       required: false
+   }
 }, {
     usePushEach: true 
 });
@@ -39,7 +43,7 @@ UserSchema.methods.toJSON = function () {
   var user = this;
   var userObject = user.toObject();
     
-    return _.pick(userObject, ['_id', 'email']);
+    return _.pick(userObject, ['_id', 'email', 'schoolID']);
 };
 
 UserSchema.methods.generateAuthToken = function () {
