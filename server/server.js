@@ -6,6 +6,7 @@ const _ = require('lodash');
 const express = require('express');
 const bodyParser = require('body-parser');
 const {ObjectID} = require('mongodb');
+const cors = require('cors')
 
 var {mongoose} = require('./db/mongoose');
 var {Todo} = require('./models/todo');
@@ -20,16 +21,17 @@ const port = process.env.PORT || 5000;
 
 // MIDDLEWARES
 app.use(bodyParser.json());
-app.use(function (req, res, next) {
-    res.setHeader("Cache-Control", "no-cache");
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, X-Response-Time, X-PINGOTHER, X-CSRF-Token, Authorization, x-auth' );
-    res.setHeader('Access-Control-Allow-Methods', '*');
-    res.setHeader('Access-Control-Expose-Headers', 'X-Api-Version, x-auth, X-Request-Id, X-Response-Time');
-    res.setHeader('Access-Control-Max-Age', '1000');
-    res.setHeader("Content-Type", "application/json;charset=utf-8");
-    next();
-});
+app.use(cors());
+//app.use(function (req, res, next) {
+//    res.setHeader("Cache-Control", "no-cache");
+//    res.setHeader('Access-Control-Allow-Origin', '*');
+//    res.setHeader('Access-Control-Allow-Headers', 'Origin, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, X-Response-Time, X-PINGOTHER, X-CSRF-Token, Authorization, x-auth' );
+//    res.setHeader('Access-Control-Allow-Methods', '*');
+//    res.setHeader('Access-Control-Expose-Headers', 'X-Api-Version, x-auth, X-Request-Id, X-Response-Time');
+//    res.setHeader('Access-Control-Max-Age', '1000');
+//    res.setHeader("Content-Type", "application/json;charset=utf-8");
+//    next();
+//});
 
 // POST CLASS //
 
