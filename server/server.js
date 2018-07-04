@@ -6,7 +6,6 @@ const _ = require('lodash');
 const express = require('express');
 const bodyParser = require('body-parser');
 const {ObjectID} = require('mongodb');
-const cors = require('cors')
 
 var {mongoose} = require('./db/mongoose');
 var {Todo} = require('./models/todo');
@@ -21,15 +20,12 @@ const port = process.env.PORT || 5000;
 
 // MIDDLEWARES
 app.use(bodyParser.json());
-app.use(cors());
 app.use(function (req, res, next) {
-    res.setHeader("Cache-Control", "no-cache");
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, X-Response-Time, X-PINGOTHER, X-CSRF-Token, Authorization, x-auth' );
     res.setHeader('Access-Control-Allow-Methods', '*');
     res.setHeader('Access-Control-Expose-Headers', 'X-Api-Version, x-auth, X-Request-Id, X-Response-Time');
     res.setHeader('Access-Control-Max-Age', '1000');
-    res.setHeader("Content-Type", "application/json;charset=utf-8");
     next();
 });
 
@@ -186,49 +182,32 @@ app.patch('/todos/:id', authenticate, (req, res) => {
 /// POST /users
 
 app.post('/users', (req, res) => {
-//  var user = new User({
-//    email: req.body.email,
-//    password: req.body.password
-//  });   OR YOU CAN ALSO USE THE LODASH METHOD => Pick   
-var body = _.pick(req.body, ['email','password']);
-var user = new User(body); 
-
-  user.save().then(() => {
+    var newSchool = {
+        starCounter: 0,
+        classList: [],
+        playerPhoto: []
+    }
+    
+    var school = new School({
+         classSettings: newSchool
+    })
+  
+    var user = new User({
+        email: req.body.email,
+        password: req.body.password,
+        schoolID: school._id
+    });  // OR YOU CAN ALSO USE THE LODASH METHOD => var body = _.pick(req.body, ['email','password']);
+    
+  school.save().then(()=> {
+      return user.save();
+  }).then(() => {
      return user.generateAuthToken();
   }).then((token) => {
-    res.header('x-auth', token).send(user);
+    res.header('x-auth', token).send({user, school});
   }).catch((e) => {
     res.status(400).send(e);
   });
 });
-
-//app.post('/users', (req, res) => {
-//    var newSchool = {
-//        starCounter: 0,
-//        classList: [],
-//        playerPhoto: []
-//    }
-//    
-//    var school = new School({
-//         classSettings: newSchool
-//    })
-//  
-//    var user = new User({
-//        email: req.body.email,
-//        password: req.body.password,
-//        schoolID: school._id
-//    });  // OR YOU CAN ALSO USE THE LODASH METHOD => var body = _.pick(req.body, ['email','password']);
-//    
-//  school.save().then(()=> {
-//      return user.save();
-//  }).then(() => {
-//     return user.generateAuthToken();
-//  }).then((token) => {
-//    res.header('x-auth', token).send({user, school});
-//  }).catch((e) => {
-//    res.status(400).send(e);
-//  });
-//});
 
 
 app.post('/users/login', (req, res) => {
